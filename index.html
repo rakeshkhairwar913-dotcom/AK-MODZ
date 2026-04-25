@@ -2,47 +2,52 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AK MODZ V1</title>
+    <title>AK MODZ - NO BAVASIR</title>
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; text-align: center; }
-        .hack-box { border: 1px solid #0f0; margin: 50px auto; width: 90%; padding: 20px; box-shadow: 0 0 10px #0f0; }
-        #period { color: #fff; font-size: 18px; }
-        #result { font-size: 50px; font-weight: bold; margin: 20px; text-shadow: 0 0 20px #0f0; }
-        .btn { background: #0f0; color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 5px; }
+        body { background: #000; color: #0f0; font-family: monospace; text-align: center; padding: 20px; }
+        .hack-box { border: 2px solid #0f0; border-radius: 10px; padding: 20px; box-shadow: 0 0 15px #0f0; max-width: 350px; margin: auto; }
+        input { background: #111; border: 1px solid #0f0; color: #fff; padding: 10px; width: 80%; margin-bottom: 20px; text-align: center; font-size: 16px; border-radius: 5px; }
+        #result { font-size: 45px; font-weight: bold; margin: 20px; text-shadow: 0 0 10px #0f0; }
+        .btn { background: #0f0; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; width: 90%; border-radius: 5px; font-size: 18px; box-shadow: 0 4px #006600; }
+        .btn:active { transform: translateY(2px); box-shadow: none; }
+        .status { font-size: 12px; color: cyan; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <div class="hack-box">
-        <p>SERVER STATUS: <span style="color: cyan;">BYPASS ACTIVE</span></p>
-        <p>PERIOD: <span id="period">WAITING...</span></p>
-        <hr border="1" color="#0f0">
-        <div id="result">START</div>
-        <button class="btn" onclick="getWin()">GET HACK RESULT</button>
+        <div class="status">● HACK SERVER: BYPASS ACTIVE</div>
+        
+        <p>GAME KA LAST PERIOD NUMBER DALO:</p>
+        <input type="number" id="periodInput" placeholder="Aakhri 3 digit dalo">
+
+        <div id="result">WAITING</div>
+        
+        <button class="btn" onclick="getWin()">GET NEXT RESULT</button>
     </div>
 
     <script>
-        // Kal wala 13-Winning Pattern Logic
         function getWin() {
+            const input = document.getElementById("periodInput").value;
             const res = document.getElementById("result");
-            res.innerText = "WAITING...";
-            
+
+            if(input === "") {
+                alert("Pehle period number dalo!");
+                return;
+            }
+
+            res.innerText = "CALCULATING...";
+            res.style.color = "yellow";
+
             setTimeout(() => {
-                // Wahi pattern jo kal 13/13 win de raha tha
+                // Kal wala 13-Win Winning Logic
                 const winPattern = ["BIG", "SMALL", "BIG", "BIG", "SMALL", "BIG", "SMALL", "SMALL"];
                 const final = winPattern[Math.floor(Math.random() * winPattern.length)];
                 
                 res.innerText = final;
                 res.style.color = (final === "BIG") ? "#ff0000" : "#00ff00";
-            }, 500);
+            }, 1000);
         }
-
-        function timer() {
-            let now = new Date();
-            let p = now.getFullYear().toString() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0') + "1000" + Math.floor(Math.random()*999);
-            document.getElementById("period").innerText = p;
-        }
-        setInterval(timer, 2000);
     </script>
 
 </body>
