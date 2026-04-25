@@ -2,51 +2,56 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AK MODZ - NO BAVASIR</title>
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; text-align: center; padding: 20px; }
-        .hack-box { border: 2px solid #0f0; border-radius: 10px; padding: 20px; box-shadow: 0 0 15px #0f0; max-width: 350px; margin: auto; }
-        input { background: #111; border: 1px solid #0f0; color: #fff; padding: 10px; width: 80%; margin-bottom: 20px; text-align: center; font-size: 16px; border-radius: 5px; }
-        #result { font-size: 45px; font-weight: bold; margin: 20px; text-shadow: 0 0 10px #0f0; }
-        .btn { background: #0f0; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; width: 90%; border-radius: 5px; font-size: 18px; box-shadow: 0 4px #006600; }
-        .btn:active { transform: translateY(2px); box-shadow: none; }
-        .status { font-size: 12px; color: cyan; margin-bottom: 10px; }
+        body { background: #000; color: #fff; text-align: center; font-family: monospace; padding: 20px; }
+        .hack-container { border: 1px solid #0f0; padding: 20px; border-radius: 10px; max-width: 350px; margin: auto; box-shadow: 0 0 15px #0f0; }
+        input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 12px; width: 80%; font-size: 18px; text-align: center; margin-bottom: 20px; outline: none; }
+        #res_box { margin-top: 10px; display: none; }
+        .res_text { font-size: 60px; font-weight: bold; margin: 10px 0; }
+        .num_text { font-size: 35px; color: cyan; letter-spacing: 10px; border: 1px dashed #444; padding: 10px; display: inline-block; }
+        button { background: #0f0; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; width: 90%; font-size: 18px; text-transform: uppercase; }
+        button:active { background: #0c0; }
     </style>
 </head>
 <body>
 
-    <div class="hack-box">
-        <div class="status">● HACK SERVER: BYPASS ACTIVE</div>
+    <div class="hack-container">
+        <p style="color:#0f0; font-size: 12px;">ENTER LAST 3 DIGITS</p>
+        <input type="number" id="lastPeriod" placeholder="000">
         
-        <p>GAME KA LAST PERIOD NUMBER DALO:</p>
-        <input type="number" id="periodInput" placeholder="Aakhri 3 digit dalo">
+        <button onclick="runHack()">GET RESULT</button>
 
-        <div id="result">WAITING</div>
-        
-        <button class="btn" onclick="getWin()">GET NEXT RESULT</button>
+        <div id="res_box">
+            <div class="res_text" id="outSize">--</div>
+            <div class="num_text" id="outNums">-- --</div>
+        </div>
     </div>
 
     <script>
-        function getWin() {
-            const input = document.getElementById("periodInput").value;
-            const res = document.getElementById("result");
+        function runHack() {
+            let val = document.getElementById('lastPeriod').value;
+            if(val == "") { alert("Dalo!"); return; }
 
-            if(input === "") {
-                alert("Pehle period number dalo!");
-                return;
+            let outSize = document.getElementById('outSize');
+            let outNums = document.getElementById('outNums');
+            document.getElementById('res_box').style.display = "block";
+
+            // Logic: 13-Win Winning Logic
+            let isBig = Math.random() > 0.5;
+
+            if (isBig) {
+                // BIG logic: 5,6,7,8,9
+                outSize.innerText = "BIG";
+                outSize.style.color = "#ff3333";
+                let b = [5,6,7,8,9].sort(() => .5 - Math.random());
+                outNums.innerText = b[0] + " " + b[1];
+            } else {
+                // SMALL logic: 0,1,2,3,4
+                outSize.innerText = "SMALL";
+                outSize.style.color = "#33ff33";
+                let s = [0,1,2,3,4].sort(() => .5 - Math.random());
+                outNums.innerText = s[0] + " " + s[1];
             }
-
-            res.innerText = "CALCULATING...";
-            res.style.color = "yellow";
-
-            setTimeout(() => {
-                // Kal wala 13-Win Winning Logic
-                const winPattern = ["BIG", "SMALL", "BIG", "BIG", "SMALL", "BIG", "SMALL", "SMALL"];
-                const final = winPattern[Math.floor(Math.random() * winPattern.length)];
-                
-                res.innerText = final;
-                res.style.color = (final === "BIG") ? "#ff0000" : "#00ff00";
-            }, 1000);
         }
     </script>
 
