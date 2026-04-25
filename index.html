@@ -4,22 +4,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { background: #000; color: #fff; text-align: center; font-family: monospace; padding: 20px; }
-        .hack-container { border: 1px solid #0f0; padding: 20px; border-radius: 10px; max-width: 350px; margin: auto; box-shadow: 0 0 15px #0f0; }
-        input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 12px; width: 80%; font-size: 18px; text-align: center; margin-bottom: 20px; outline: none; }
+        .box { border: 2px solid #0f0; padding: 20px; border-radius: 10px; max-width: 350px; margin: auto; box-shadow: 0 0 15px #0f0; }
+        input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 12px; width: 85%; font-size: 20px; text-align: center; margin-bottom: 20px; outline: none; border-radius: 5px; }
         #res_box { margin-top: 10px; display: none; }
         .res_text { font-size: 60px; font-weight: bold; margin: 10px 0; }
-        .num_text { font-size: 35px; color: cyan; letter-spacing: 10px; border: 1px dashed #444; padding: 10px; display: inline-block; }
-        button { background: #0f0; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; width: 90%; font-size: 18px; text-transform: uppercase; }
-        button:active { background: #0c0; }
+        .num_text { font-size: 45px; color: #00ffff; letter-spacing: 15px; background: #222; padding: 10px; display: inline-block; border-radius: 8px; border: 1px dashed #00ffff; }
+        button { background: #0f0; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; width: 95%; font-size: 18px; border-radius: 5px; }
+        button:active { background: #0c0; transform: scale(0.98); }
     </style>
 </head>
 <body>
 
-    <div class="hack-container">
-        <p style="color:#0f0; font-size: 12px;">ENTER LAST 3 DIGITS</p>
-        <input type="number" id="lastPeriod" placeholder="000">
-        
-        <button onclick="runHack()">GET RESULT</button>
+    <div class="box">
+        <p style="color:#0f0; font-size: 14px; margin-bottom: 10px;">ENTER LAST 3 DIGITS</p>
+        <input type="number" id="periodInput" placeholder="000">
+        <button onclick="getHack()">GET FIX RESULT</button>
 
         <div id="res_box">
             <div class="res_text" id="outSize">--</div>
@@ -28,29 +27,40 @@
     </div>
 
     <script>
-        function runHack() {
-            let val = document.getElementById('lastPeriod').value;
-            if(val == "") { alert("Dalo!"); return; }
+        function getHack() {
+            let val = document.getElementById('periodInput').value;
+            if(val == "" || val.length < 1) { alert("Pehle number dalo bhai!"); return; }
 
             let outSize = document.getElementById('outSize');
             let outNums = document.getElementById('outNums');
             document.getElementById('res_box').style.display = "block";
 
-            // Logic: 13-Win Winning Logic
-            let isBig = Math.random() > 0.5;
+            // PERIOD SE RESULT FIX KARNE KA LOGIC
+            let seed = parseInt(val);
+            
+            // Period ke aakhri digit se decide hoga (Even = BIG, Odd = SMALL)
+            let lastDigit = seed % 10;
 
-            if (isBig) {
-                // BIG logic: 5,6,7,8,9
+            if (lastDigit % 2 === 0) {
+                // BIG SECTION (Only 5,6,7,8,9)
                 outSize.innerText = "BIG";
                 outSize.style.color = "#ff3333";
-                let b = [5,6,7,8,9].sort(() => .5 - Math.random());
-                outNums.innerText = b[0] + " " + b[1];
+                
+                // Seed based fix numbers
+                let n1 = 5 + (seed % 5);
+                let n2 = 5 + ((seed + 2) % 5);
+                if(n1 == n2) n2 = (n1 == 9) ? 5 : n1 + 1;
+                outNums.innerText = n1 + " " + n2;
             } else {
-                // SMALL logic: 0,1,2,3,4
+                // SMALL SECTION (Only 0,1,2,3,4)
                 outSize.innerText = "SMALL";
                 outSize.style.color = "#33ff33";
-                let s = [0,1,2,3,4].sort(() => .5 - Math.random());
-                outNums.innerText = s[0] + " " + s[1];
+                
+                // Seed based fix numbers
+                let n1 = seed % 5;
+                let n2 = (seed + 3) % 5;
+                if(n1 == n2) n2 = (n1 == 4) ? 0 : n1 + 1;
+                outNums.innerText = n1 + " " + n2;
             }
         }
     </script>
