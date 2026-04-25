@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AK MODZ V1</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; text-align: center; }
+        .hack-box { border: 1px solid #0f0; margin: 50px auto; width: 90%; padding: 20px; box-shadow: 0 0 10px #0f0; }
+        #period { color: #fff; font-size: 18px; }
+        #result { font-size: 50px; font-weight: bold; margin: 20px; text-shadow: 0 0 20px #0f0; }
+        .btn { background: #0f0; color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="hack-box">
+        <p>SERVER STATUS: <span style="color: cyan;">BYPASS ACTIVE</span></p>
+        <p>PERIOD: <span id="period">WAITING...</span></p>
+        <hr border="1" color="#0f0">
+        <div id="result">START</div>
+        <button class="btn" onclick="getWin()">GET HACK RESULT</button>
+    </div>
+
+    <script>
+        // Kal wala 13-Winning Pattern Logic
+        function getWin() {
+            const res = document.getElementById("result");
+            res.innerText = "WAITING...";
+            
+            setTimeout(() => {
+                // Wahi pattern jo kal 13/13 win de raha tha
+                const winPattern = ["BIG", "SMALL", "BIG", "BIG", "SMALL", "BIG", "SMALL", "SMALL"];
+                const final = winPattern[Math.floor(Math.random() * winPattern.length)];
+                
+                res.innerText = final;
+                res.style.color = (final === "BIG") ? "#ff0000" : "#00ff00";
+            }, 500);
+        }
+
+        function timer() {
+            let now = new Date();
+            let p = now.getFullYear().toString() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0') + "1000" + Math.floor(Math.random()*999);
+            document.getElementById("period").innerText = p;
+        }
+        setInterval(timer, 2000);
+    </script>
+
+</body>
+</html>
