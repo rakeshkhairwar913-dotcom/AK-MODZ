@@ -5,10 +5,20 @@
     <style>
         body { background: #000; color: #fff; text-align: center; font-family: monospace; padding: 20px; }
         .box { border: 2px solid #0f0; padding: 20px; border-radius: 10px; max-width: 350px; margin: auto; box-shadow: 0 0 15px #0f0; }
+        
+        /* Server Status Style */
+        .status-line { font-size: 10px; color: #0f0; margin-bottom: 15px; text-align: left; }
+        
         input { background: #111; color: #0f0; border: 1px solid #0f0; padding: 12px; width: 85%; font-size: 20px; text-align: center; margin-bottom: 20px; outline: none; border-radius: 5px; }
+        
+        #loading { display: none; margin: 20px 0; color: cyan; font-size: 14px; }
+        .bar-bg { width: 100%; background: #222; height: 10px; border-radius: 5px; margin-top: 5px; }
+        .bar-fill { width: 0%; background: #0f0; height: 10px; border-radius: 5px; transition: 2s; }
+
         #res_box { margin-top: 10px; display: none; }
         .res_text { font-size: 60px; font-weight: bold; margin: 10px 0; }
         .num_text { font-size: 45px; color: #00ffff; letter-spacing: 15px; background: #222; padding: 10px; display: inline-block; border-radius: 8px; border: 1px dashed #00ffff; }
+        
         button { background: #0f0; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; width: 95%; font-size: 18px; border-radius: 5px; }
         button:active { background: #0c0; transform: scale(0.98); }
     </style>
@@ -16,9 +26,15 @@
 <body>
 
     <div class="box">
-        <p style="color:#0f0; font-size: 14px; margin-bottom: 10px;">ENTER LAST 3 DIGITS</p>
-        <input type="number" id="periodInput" placeholder="000">
-        <button onclick="getHack()">GET FIX RESULT</button>
+        <div class="status-line">● SERVER: <span id="server-status">ONLINE</span><br>● DATA BYPASS: ACTIVE</div>
+        
+        <input type="number" id="periodInput" placeholder="LAST 3 DIGIT">
+        <button id="mainBtn" onclick="connectServer()">CONNECT & HACK</button>
+
+        <div id="loading">
+            CONNECTING TO GAME SERVER...
+            <div class="bar-bg"><div class="bar-fill" id="fill"></div></div>
+        </div>
 
         <div id="res_box">
             <div class="res_text" id="outSize">--</div>
@@ -27,36 +43,47 @@
     </div>
 
     <script>
-        function getHack() {
+        function connectServer() {
             let val = document.getElementById('periodInput').value;
-            if(val == "" || val.length < 1) { alert("Pehle number dalo bhai!"); return; }
+            if(val == "") { alert("Pehle period number dalo!"); return; }
 
+            // Reset view
+            document.getElementById('res_box').style.display = "none";
+            document.getElementById('loading').style.display = "block";
+            document.getElementById('mainBtn').disabled = true;
+            
+            let fill = document.getElementById('fill');
+            fill.style.width = "100%";
+
+            // 2 second ka server connection delay
+            setTimeout(() => {
+                showResult(val);
+                document.getElementById('loading').style.display = "none";
+                fill.style.width = "0%";
+                document.getElementById('mainBtn').disabled = false;
+            }, 2500);
+        }
+
+        function showResult(val) {
             let outSize = document.getElementById('outSize');
             let outNums = document.getElementById('outNums');
             document.getElementById('res_box').style.display = "block";
 
-            // PERIOD SE RESULT FIX KARNE KA LOGIC
             let seed = parseInt(val);
-            
-            // Period ke aakhri digit se decide hoga (Even = BIG, Odd = SMALL)
             let lastDigit = seed % 10;
 
             if (lastDigit % 2 === 0) {
-                // BIG SECTION (Only 5,6,7,8,9)
+                // BIG SECTION (5,6,7,8,9)
                 outSize.innerText = "BIG";
                 outSize.style.color = "#ff3333";
-                
-                // Seed based fix numbers
                 let n1 = 5 + (seed % 5);
                 let n2 = 5 + ((seed + 2) % 5);
                 if(n1 == n2) n2 = (n1 == 9) ? 5 : n1 + 1;
                 outNums.innerText = n1 + " " + n2;
             } else {
-                // SMALL SECTION (Only 0,1,2,3,4)
+                // SMALL SECTION (0,1,2,3,4)
                 outSize.innerText = "SMALL";
                 outSize.style.color = "#33ff33";
-                
-                // Seed based fix numbers
                 let n1 = seed % 5;
                 let n2 = (seed + 3) % 5;
                 if(n1 == n2) n2 = (n1 == 4) ? 0 : n1 + 1;
